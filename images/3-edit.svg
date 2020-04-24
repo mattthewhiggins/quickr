@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="741px" height="797px" viewBox="0 0 741 797" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 64 (93537) - https://sketch.com -->
+    <title>3-edit</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <path d="M72.5,0 L491,0 C530.764502,-0.0581348311 563,32.1773632 563,71.9418652 C563,71.9612513 562.999992,71.9806374 562.941842,71.9999765 L562.558158,547.000023 C562.467875,586.741755 530.241792,618.941818 490.5,619 L72,619 C32.235498,619.058135 4.86974701e-15,586.822637 0,547.058135 C-2.37411286e-18,547.038749 7.82960368e-06,547.019363 0.0581583009,547.000023 L0.441841699,71.9999765 C0.532125087,32.2582448 32.7582083,0.0581818087 72.5,0 Z" id="path-1"></path>
+        <filter x="-25.3%" y="-20.6%" width="150.6%" height="146.0%" filterUnits="objectBoundingBox" id="filter-3">
+            <feOffset dx="0" dy="15" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="45" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0.858823529   0 0 0 0 0.917647059   0 0 0 0 0.960784314  0 0 0 1 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-4">
+            <stop stop-color="#41BCFF" offset="0%"></stop>
+            <stop stop-color="#016BFF" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="website" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="web---desktop" transform="translate(-818.000000, -3034.000000)">
+            <g id="3-edit" transform="translate(907.000000, 3108.000000)">
+                <g id="Group-3">
+                    <mask id="mask-2" fill="white">
+                        <use xlink:href="#path-1"></use>
+                    </mask>
+                    <g id="Mask">
+                        <use fill="black" fill-opacity="1" filter="url(#filter-3)" xlink:href="#path-1"></use>
+                        <use fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-1"></use>
+                    </g>
+                    <rect id="Rectangle" fill="#EDF3F9" mask="url(#mask-2)" x="0" y="0.5" width="562.5" height="161"></rect>
+                </g>
+                <g id="Bars/Home-Indicator/iPhone/Light---Portrait" transform="translate(181.000000, 546.000000)" fill="#000000">
+                    <rect id="Home-Indicator" x="0" y="31.5" width="201" height="7.5" rx="3.75"></rect>
+                </g>
+                <g id="icon-/-circle" transform="translate(24.000000, 71.500000)">
+                    <rect id="Rectangle-Copy" fill="url(#linearGradient-4)" x="0" y="0" width="60" height="45" rx="22.5"></rect>
+                    <path d="M29.3876689,36.5625 L29.0996495,36.5591926 C21.1547138,36.3918954 14.765625,29.8991048 14.765625,21.9140625 C14.765625,13.8239539 21.3239539,7.265625 29.4140625,7.265625 C37.5041711,7.265625 44.0625,13.8239539 44.0625,21.9140625 L44.0625,21.8876689 L44.0625,36.5625 L29.3876689,36.5625 Z" id="Combined-Shape-Copy-3" fill="#FFFFFF"></path>
+                </g>
+                <rect id="Rectangle" stroke="#CED5E0" stroke-width="1.5" fill="#FFFFFF" x="188.25" y="69.25" width="349.5" height="52.5" rx="25.5"></rect>
+                <text id="􀁷" font-family="SFCompactDisplay-Regular, SF Compact Display" font-size="42" font-weight="normal" fill="#007AFF">
+                    <tspan x="488.151855" y="108.5">􀁷</tspan>
+                </text>
+                <g id="Group" transform="translate(0.000000, 140.500000)">
+                    <path d="M12,0 L550.5,0 C557.127417,-2.99379359e-15 562.5,5.372583 562.5,12 L562.5,383 L562.5,383 L0,383 L0,12 C-8.11624501e-16,5.372583 5.372583,1.21743675e-15 12,0 Z" id="Rectangle" fill="#FFFFFF"></path>
+                    <rect id="Rectangle" fill="#C4C4C6" x="253.5" y="7.5" width="54" height="7.5" rx="3.75"></rect>
+                </g>
+                <text id="Done" font-family="CircularStd-Book, Circular Std" font-size="27" font-weight="300" fill="#2194FF">
+                    <tspan x="473.808" y="209.5">Done</tspan>
+                </text>
+                <text id="Cancel" font-family="CircularStd-Book, Circular Std" font-size="27" font-weight="300" fill="#2194FF">
+                    <tspan x="24" y="209.5">Cancel</tspan>
+                </text>
+                <rect id="Rectangle-Copy" fill="#E5EBF0" x="0" y="248.5" width="562.5" height="1.5"></rect>
+                <rect id="Rectangle-Copy-3" fill="#FFFFFF" x="0" y="250" width="562.5" height="90"></rect>
+                <text id="Hi,-how-are-you?" font-family="CircularStd-Bold, Circular Std" font-size="27" font-weight="bold" line-spacing="36" fill="#000000">
+                    <tspan x="88.5" y="304">Hi, how are you?</tspan>
+                </text>
+                <text id="􀁏" font-family="SFCompactDisplay-Regular, SF Compact Display" font-size="36" font-weight="normal" fill="#FF0000">
+                    <tspan x="24" y="308">􀁏</tspan>
+                </text>
+                <text id="􀌇" font-family="SFCompactDisplay-Regular, SF Compact Display" font-size="36" font-weight="normal" fill="#D1D3DA">
+                    <tspan x="495.603516" y="308">􀌇</tspan>
+                </text>
+                <rect id="Rectangle" fill="#E5EBF0" x="0" y="341.5" width="562.5" height="1.5"></rect>
+                <rect id="Rectangle-Copy-8" fill="#FFFFFF" x="0" y="343" width="562.5" height="90"></rect>
+                <rect id="Rectangle-Copy-9" fill="#FFFFFF" x="0" y="436" width="562.5" height="90"></rect>
+                <text id="I’m-on-my-way" font-family="CircularStd-Bold, Circular Std" font-size="27" font-weight="bold" line-spacing="36" fill="#000000">
+                    <tspan x="88.5" y="397">I’m on my way</tspan>
+                </text>
+                <text id="That’s-hilarious-😂😂" font-family="CircularStd-Bold, Circular Std" font-size="27" font-weight="bold" line-spacing="36" fill="#000000">
+                    <tspan x="88.5" y="490">That’s hilarious </tspan>
+                    <tspan x="283.116" y="490" font-family="AppleColorEmoji, Apple Color Emoji" font-weight="normal">😂😂</tspan>
+                </text>
+                <text id="􀁏-copy" font-family="SFCompactDisplay-Regular, SF Compact Display" font-size="36" font-weight="normal" fill="#FF0000">
+                    <tspan x="24" y="401">􀁏</tspan>
+                </text>
+                <text id="􀁏-copy-2" font-family="SFCompactDisplay-Regular, SF Compact Display" font-size="36" font-weight="normal" fill="#FF0000">
+                    <tspan x="24" y="494">􀁏</tspan>
+                </text>
+                <text id="􀌇-copy" font-family="SFCompactDisplay-Regular, SF Compact Display" font-size="36" font-weight="normal" fill="#D1D3DA">
+                    <tspan x="495.603516" y="401">􀌇</tspan>
+                </text>
+                <text id="􀌇-copy-2" font-family="SFCompactDisplay-Regular, SF Compact Display" font-size="36" font-weight="normal" fill="#D1D3DA">
+                    <tspan x="495.603516" y="494">􀌇</tspan>
+                </text>
+                <rect id="Rectangle-Copy-5" fill="#E5EBF0" x="0" y="434.5" width="562.5" height="1.5"></rect>
+                <rect id="Rectangle-Copy-10" fill="#E5EBF0" x="0" y="527.5" width="562.5" height="1.5"></rect>
+                <rect id="Rectangle-Copy-4" fill="#E5EBF0" x="0" y="341.5" width="562.5" height="1.5"></rect>
+                <rect id="Rectangle-Copy-11" fill="#E5EBF0" x="0" y="434.5" width="562.5" height="1.5"></rect>
+                <rect id="Rectangle-Copy-12" fill="#E5EBF0" x="0" y="527.5" width="562.5" height="1.5"></rect>
+                <text id="Edit-messages" font-family="CircularStd-Book, Circular Std" font-size="27" font-weight="300" fill="#000000">
+                    <tspan x="194.1675" y="209.5">Edit messages</tspan>
+                </text>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="147px" height="50px" viewBox="0 0 147 50" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 64 (93537) - https://sketch.com -->
+    <title>logo</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#41BCFF" offset="0%"></stop>
+            <stop stop-color="#016BFF" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Design" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Branding" transform="translate(-69.000000, -132.000000)">
+            <g id="logo" transform="translate(69.000000, 132.000000)">
+                <g id="logo-mobile">
+                    <rect id="Rectangle-Copy" fill="url(#linearGradient-1)" x="0" y="0" width="50" height="50" rx="16"></rect>
+                    <path d="M23.9709313,39.2823147 C16.226511,39.1148905 10,32.784585 10,25 C10,17.1102179 16.3959321,10.7142857 24.2857143,10.7142857 C32.1754964,10.7142857 38.5714286,17.1102179 38.5714286,25 L38.5714286,25 L38.5714286,39.2857143 L24.2857143,39.2857143 Z" id="Combined-Shape-Copy-3" fill="#FFFFFF"></path>
+                </g>
+                <text id="uickr" font-family="CircularStd-Bold, Circular Std" font-size="40" font-weight="bold" line-spacing="48" fill="#262D3C">
+                    <tspan x="54" y="40">uickr</tspan>
+                </text>
+            </g>
+        </g>
+    </g>
+</svg>

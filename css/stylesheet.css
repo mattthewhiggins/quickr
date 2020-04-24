@@ -1,0 +1,442 @@
+/* apply a natural box layout model to all elements, but allowing components to change */
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+/* styling for page */
+body {
+  font-family: 'CircularStd-Book', sans-serif;
+  /* font-family: 'Open Sans', sans-serif; */
+  margin: 0;
+  overflow-x: hidden; /* for homepage text, as it's off-screen */
+}
+
+/* circular black font */
+@font-face {
+  font-family: 'CircularStd-Black';
+  src: url('../fonts/CircularStd-Black.woff2') format('woff2'), /* Super Modern Browsers */
+       url('../fonts/CircularStd-Black.woff') format('woff'); /* Pretty Modern Browsers */
+  font-weight: 800;
+  font-style: normal;
+}
+
+/* circular book font */
+@font-face {
+  font-family: 'CircularStd-Book';
+  src: url('../fonts/CircularStd-Book.woff2') format('woff2'), /* Super Modern Browsers */
+       url('../fonts/CircularStd-Book.woff') format('woff'); /* Pretty Modern Browsers */
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* smoothes out the scrolling on certain broswers */
+html {
+  scroll-behavior: smooth;
+}
+
+a {
+  color: #026CFF;
+  text-decoration: none;
+
+  transition: all 0.3s ease; /* vendorless fallback */
+  -o-transition: all 0.3s ease; /* opera */
+  -ms-transition: all 0.3s ease; /* IE 10 */
+  -moz-transition: all 0.3s ease; /* Firefox */
+  -webkit-transition: all 0.3s ease; /*safari and chrome */
+}
+
+a:hover {
+  text-decoration: underline;
+
+}
+
+/* header styles */
+h1 {
+  font-family: 'CircularStd-Black';
+  font-size: 48px;
+  font-weight: 800;
+}
+h2 {
+  font-family: 'CircularStd-Black';
+  font-size: 32px;
+  line-height: 40px;
+  font-weight: 800;
+}
+h4 {
+  font-size: 18px;
+  line-height: 26px;
+  font-weight: normal;
+  margin-top: 0;
+}
+
+
+/* makes images fit within div */
+img {
+    max-width: 100%;
+}
+
+.hr-style-1 {
+  margin: 0;
+  background-color: #DDE0E8;
+  height: 1px;
+  border: 0;
+}
+
+.hr-style-2 {
+  width:90%;
+  margin: auto;
+  background-color: #DDE0E8;
+  height: 1px;
+  border: 0;
+}
+
+
+.topmargin {
+  margin-top: 64px;
+  width: 90%
+}
+
+.image-full {
+   display: none;
+  }
+
+.image-mobile {
+   display: block;
+  }
+
+/* makes content indented */
+.content-indented {
+  padding-right: 16px;
+  padding-left: 16px;
+}
+
+.width-left {
+  width: 50%;
+  background: lightcyan;
+  display: inline-block;
+  float:left;
+}
+
+.width-right {
+  width: 50%;
+  background: lightcyan;
+  display: inline-block;
+  float:left;
+}
+
+/* navigation bar */
+
+/* Style the navbar */
+.navbar {
+  height: 100px;
+  background-color: #fff;
+  padding-top: 25px;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+/* makes items sticky */
+.sticky {
+  position: sticky;
+  top: 100px;
+  z-index: 1;
+}
+
+
+
+/* Style the links inside the navigation bar */
+.navbar button {
+  float: right;
+  text-align: center;
+  text-decoration: none;
+  font-size: 18px;
+  padding: 0;
+  margin-left: 16px;
+}
+
+
+/* styling for portfolio button */
+.button-blue {
+  height: 50px;
+  width: 130px;
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: 700;
+  color: #ffffff;
+  background: #026CFF;
+  border-radius: 100px;
+  cursor: pointer;
+  border: 0;
+
+  transition: all 0.3s ease; /* vendorless fallback */
+  -o-transition: all 0.3s ease; /* opera */
+  -ms-transition: all 0.3s ease; /* IE 10 */
+  -moz-transition: all 0.3s ease; /* Firefox */
+  -webkit-transition: all 0.3s ease; /*safari and chrome */
+
+}
+.button-blue:hover {
+  background: black;
+}
+.button-blue:focus {
+  outline: 0;
+}
+
+.button-white {
+  height: 48px;
+  font-family: inherit;
+  font-weight: 700;
+  background: #fff;
+  border-radius: 100px;
+  cursor: pointer;
+  border: 0;
+
+  transition: all 0.3s ease; /* vendorless fallback */
+  -o-transition: all 0.3s ease; /* opera */
+  -ms-transition: all 0.3s ease; /* IE 10 */
+  -moz-transition: all 0.3s ease; /* Firefox */
+  -webkit-transition: all 0.3s ease; /*safari and chrome */
+}
+
+.button-white:hover {
+  color: #026CFF;
+}
+.button-white:focus {
+  outline: 0;
+}
+
+.blue-padding {
+  background: #ECF4FE;
+  padding-bottom: 64px;
+}
+
+/* ==== GRID SYSTEM ==== */
+
+.container {
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: 64px;
+  padding-bottom: 64px;
+}
+
+
+
+.row {
+  position: relative;
+  width: 100%;
+  display: inline;
+  align-items: center;
+  justify-content: center;
+}
+
+.row [class^="col"] {
+  float: left;
+  margin: 0.5rem 2%;
+  min-height: 0.125rem;
+}
+
+.col-1,
+.col-2,
+.col-3,
+.col-4,
+.col-5,
+.col-6,
+.col-7,
+.col-8,
+.col-9,
+.col-10,
+.col-11,
+.col-12 {
+  width: 96%;
+}
+
+.col-1-sm {
+  width: 4.33%;
+}
+
+.col-2-sm {
+  width: 12.66%;
+}
+
+.col-3-sm {
+  width: 21%;
+}
+
+.col-4-sm {
+  width: 29.33%;
+}
+
+.col-5-sm {
+  width: 37.66%;
+}
+
+.col-6-sm {
+  width: 46%;
+}
+
+.col-7-sm {
+  width: 54.33%;
+}
+
+.col-8-sm {
+  width: 62.66%;
+}
+
+.col-9-sm {
+  width: 71%;
+}
+
+.col-10-sm {
+  width: 79.33%;
+}
+
+.col-11-sm {
+  width: 87.66%;
+}
+
+.col-12-sm {
+  width: 96%;
+}
+
+.row::after {
+	content: "";
+	display: table;
+	clear: both;
+}
+
+.hidden-sm {
+  display: none;
+}
+
+@media only screen and (min-width: 33.75em) {  /* 540px */
+}
+
+
+
+/* Desktop Code */
+
+@media only screen and (min-width: 50em) {  /* 800px */
+
+  /* makes content indented */
+  .content-indented {
+    padding-right: 60px;
+    padding-left: 60px;
+  }
+
+  /* Style the links inside the navigation bar */
+  .navbar button {
+    margin-left: 60px;
+  }
+
+  /* styling for portfolio button */
+  .button-blue {
+    width: 160px;
+  }
+
+  h1 {
+    font-size: 72px;
+    line-height: 88px;
+    margin-top: 0;
+    margin-bottom: 32px;
+  }
+
+
+  h2 {
+    font-size: 48px;
+    line-height: 60px;
+  }
+
+  h4 {
+    font-size: 24px;
+    line-height: 34px;
+  }
+
+  .hr-style-2 {
+    background-color: #fff;
+  }
+
+  .row {
+    position: relative;
+    width: 100%;
+    display: inline;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .image-full{
+     display:block;
+    }
+
+   .image-mobile{
+    display:none;
+   }
+
+  .container {
+    width: 100%;
+  }
+
+  .col-1 {
+    width: 4.33%;
+  }
+
+  .col-2 {
+    width: 12.66%;
+  }
+
+  .col-3 {
+    width: 21%;
+  }
+
+  .col-4 {
+    width: 29.33%;
+  }
+
+  .col-5 {
+    width: 37.66%;
+  }
+
+  .col-6 {
+    width: 46%;
+  }
+
+  .col-7 {
+    width: 54.33%;
+  }
+
+  .col-8 {
+    width: 62.66%;
+  }
+
+  .col-9 {
+    width: 71%;
+  }
+
+  .col-10 {
+    width: 79.33%;
+  }
+
+  .col-11 {
+    width: 87.66%;
+  }
+
+  .col-12 {
+    width: 96%;
+  }
+
+  .hidden-sm {
+    display: block;
+  }
+  .row {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+}
