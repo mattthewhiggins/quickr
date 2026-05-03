@@ -1,0 +1,44 @@
+# Copy to config.toml and fill in. config.toml is gitignored.
+
+[site]
+# Base URL of the Pokemon Centre UK store. No trailing slash.
+base_url = "https://www.pokemoncenter.com/en-gb"
+# Sitemap URL used to discover new SKUs before they're listed in categories.
+sitemap_url = "https://www.pokemoncenter.com/sitemap.xml"
+# User-Agent presented to the site. Use a normal browser string.
+user_agent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36"
+# Delay between requests, seconds. Be a polite bot.
+request_delay_seconds = 2.5
+
+[tracking]
+# Category pages to scan for new SKUs / restocks.
+# Add the actual TCG category URLs you care about.
+category_urls = [
+    # "https://www.pokemoncenter.com/en-gb/category/trading-card-game",
+    # "https://www.pokemoncenter.com/en-gb/category/booster-boxes",
+]
+# Keywords that must appear in product title for an alert (case-insensitive).
+# Empty list = alert on everything found in the categories.
+title_keywords = ["booster", "etb", "elite trainer", "tin", "collection box", "bundle"]
+# Keywords that disqualify a product even if it matches above.
+exclude_keywords = ["plush", "figure", "apparel", "t-shirt", "mug"]
+
+[storage]
+db_path = "tracker.db"
+
+[notify]
+# Channels to send to. Any of: "console", "telegram", "email"
+channels = ["console"]
+
+[notify.telegram]
+# Create a bot via @BotFather, then message it once and find your chat id.
+bot_token = ""
+chat_id = ""
+
+[notify.email]
+smtp_host = ""
+smtp_port = 587
+smtp_user = ""
+smtp_password = ""
+from_addr = ""
+to_addr = ""
