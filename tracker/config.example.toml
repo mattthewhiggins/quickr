@@ -8,6 +8,7 @@ sitemap_url = "https://www.pokemoncenter.com/sitemap.xml"
 # User-Agent presented to the site. Use a normal browser string.
 user_agent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36"
 # Delay between requests, seconds. Be a polite bot.
+# 2.5s keeps you well under any reasonable rate-limit; lower at your own risk.
 request_delay_seconds = 2.5
 
 [tracking]
@@ -17,11 +18,24 @@ category_urls = [
     # "https://www.pokemoncenter.com/en-gb/category/trading-card-game",
     # "https://www.pokemoncenter.com/en-gb/category/booster-boxes",
 ]
-# Keywords that must appear in product title for an alert (case-insensitive).
-# Empty list = alert on everything found in the categories.
-title_keywords = ["booster", "etb", "elite trainer", "tin", "collection box", "bundle"]
+# Keywords that must appear in product title/URL for an alert (case-insensitive).
+# Empty list = alert on every product not blocked by exclude_keywords.
+# Default below covers all TCG product shapes; add more if you spot misses.
+title_keywords = [
+    "booster", "etb", "elite trainer", "trainer box", "tin",
+    "collection", "bundle", "pack", "deck", "tcg", "card",
+    "premium", "ex box", "build & battle", "promo",
+]
 # Keywords that disqualify a product even if it matches above.
-exclude_keywords = ["plush", "figure", "apparel", "t-shirt", "mug"]
+exclude_keywords = [
+    "plush", "figure", "apparel", "t-shirt", "tee", "hoodie",
+    "hat", "cap", "sock", "pyjama", "blanket", "towel",
+    "mug", "cup", "plate", "bowl", "bottle",
+    "poster", "pin", "keychain", "sticker", "patch",
+    "backpack", "tote", "wallet", "purse",
+    "ornament", "figurine", "umbrella", "stationery", "notebook",
+    "lanyard", "lunchbox", "lunch box",
+]
 
 [storage]
 db_path = "tracker.db"
