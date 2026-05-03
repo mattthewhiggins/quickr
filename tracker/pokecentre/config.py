@@ -49,11 +49,28 @@ class NotifyConfig:
 
 
 @dataclass
+class AutoBuyConfig:
+    enabled: bool
+    dry_run: bool
+    profile_dir: str
+    headless: bool
+    max_price_gbp: float
+    max_orders_per_day: int
+    retry_cool_down_minutes: int
+    allowlist_keywords: list[str]
+    add_to_bag_pattern: str
+    checkout_pattern: str
+    place_order_pattern: str
+    post_pay_timeout_seconds: int
+
+
+@dataclass
 class Config:
     site: SiteConfig
     tracking: TrackingConfig
     storage_db_path: str
     notify: NotifyConfig
+    autobuy: AutoBuyConfig
     raw: dict = field(default_factory=dict)
 
 
@@ -84,10 +101,27 @@ def load(path: str | Path) -> Config:
         ),
     )
 
+    ab = data.get("autobuy", {})
+    autobuy = AutoBuyConfig(
+        enabled=bool(ab.get("enabled", False)),
+        dry_run=bool(ab.get("dry_run", True)),
+        profile_dir=ab.get("profile_dir", ".chromium-profile"),
+        headless=bool(ab.get("headless", False)),
+        max_price_gbp=float(ab.get("max_price_gbp", 200.0)),
+        max_orders_per_day=int(ab.get("max_orders_per_day", 2)),
+        retry_cool_down_minutes=int(ab.get("retry_cool_down_minutes", 60)),
+        allowlist_keywords=list(ab.get("allowlist_keywords", [])),
+        add_to_bag_pattern=ab.get("add_to_bag_pattern", "add to bag|add to cart"),
+        checkout_pattern=ab.get("checkout_pattern", "checkout|proceed to checkout"),
+        place_order_pattern=ab.get("place_order_pattern", "place order|pay now|complete order"),
+        post_pay_timeout_seconds=int(ab.get("post_pay_timeout_seconds", 90)),
+    )
+
     return Config(
         site=site,
         tracking=tracking,
         storage_db_path=storage_db_path,
         notify=notify,
+        autobuy=autobuy,
         raw=data,
     )

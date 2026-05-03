@@ -23,7 +23,17 @@ CREATE TABLE IF NOT EXISTS sitemap_urls (
     listed INTEGER NOT NULL DEFAULT 0
 );
 
+CREATE TABLE IF NOT EXISTS autobuy_attempts (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    url TEXT NOT NULL,
+    status TEXT NOT NULL,
+    detail TEXT,
+    attempted_at INTEGER NOT NULL
+);
+
 CREATE INDEX IF NOT EXISTS idx_products_last_seen ON products(last_seen);
+CREATE INDEX IF NOT EXISTS idx_autobuy_url_time ON autobuy_attempts(url, attempted_at);
+CREATE INDEX IF NOT EXISTS idx_autobuy_status_time ON autobuy_attempts(status, attempted_at);
 """
 
 
@@ -127,6 +137,44 @@ class Store:
     def mark_listed(self, url: str) -> None:
         with self._conn() as c:
             c.execute("UPDATE sitemap_urls SET listed = 1 WHERE url = ?", (url,))
+
+    def record_autobuy(self, url: str, status: str, detail: str | None = None) -> None:
+        """status: 'success' | 'dry_run' | 'pending_3ds' | 'failed' | 'skipped'."""
+        with self._conn() as c:
+            c.execute(
+                "INSERT INTO autobuy_attempts (url, status, detail, attempted_at) VALUES (?, ?, ?, ?)",
+                (url, status, detail, int(time.time())),
+            )
+
+    def autobuy_succeeded_for(self, url: str) -> bool:
+        with self._conn() as c:
+            row = c.execute(
+                "SELECT 1 FROM autobuy_attempts WHERE url = ? AND status = 'success' LIMIT 1",
+                (url,),
+            ).fetchone()
+        return row is not None
+
+    def autobuy_recent_attempt(self, url: str, within_seconds: int) -> bool:
+        cutoff = int(time.time()) - within_seconds
+        with self._conn() as c:
+            row = c.execute(
+                "SELECT 1 FROM autobuy_attempts WHERE url = ? AND attempted_at >= ? LIMIT 1",
+                (url, cutoff),
+            ).fetchone()
+        return row is not None
+
+    def autobuy_successes_today_utc(self) -> int:
+        # Day boundary in UTC.
+        import datetime as _dt
+        midnight = int(_dt.datetime.now(_dt.timezone.utc).replace(
+            hour=0, minute=0, second=0, microsecond=0
+        ).timestamp())
+        with self._conn() as c:
+            row = c.execute(
+                "SELECT COUNT(*) FROM autobuy_attempts WHERE status = 'success' AND attempted_at >= ?",
+                (midnight,),
+            ).fetchone()
+        return int(row[0])
 
 
 def _b(v: bool | None) -> int | None:

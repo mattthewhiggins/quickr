@@ -28,6 +28,16 @@ def _matches_keywords(text: str | None, cfg) -> bool:
 async def run_once(cfg: Config) -> None:
     store = Store(cfg.storage_db_path)
     notifier = Notifier(cfg.notify)
+    autobuyer = None
+    if cfg.autobuy.enabled:
+        from .autobuy import AutoBuyer
+        autobuyer = AutoBuyer(
+            cfg=cfg.autobuy,
+            site=cfg.site,
+            store=store,
+            notifier=notifier,
+            fallback_keywords=cfg.tracking.title_keywords,
+        )
 
     async with Scraper(cfg.site) as sc:
         # 1. Sitemap sweep — find new SKUs before they hit category pages.
@@ -85,6 +95,10 @@ async def run_once(cfg: Config) -> None:
             )
             store.mark_listed(product.url)
 
+            became_available = (prev is None and product.in_stock is True) or (
+                prev is not None and _became_in_stock(prev.in_stock, product.in_stock)
+            )
+
             if prev is None:
                 notifier.send(Alert(
                     kind="new_listing",
@@ -99,6 +113,9 @@ async def run_once(cfg: Config) -> None:
                     body=_describe(product),
                     url=url,
                 ))
+
+            if became_available and autobuyer is not None:
+                await autobuyer.maybe_buy(product)
 
 
 def _describe(p: Product) -> str:

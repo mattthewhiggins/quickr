@@ -56,3 +56,31 @@ smtp_user = ""
 smtp_password = ""
 from_addr = ""
 to_addr = ""
+
+[autobuy]
+# Master switch. If false, autobuy is fully disabled and Playwright is never imported.
+enabled = false
+# When true, drive through the checkout up to but not including the final "Place order"
+# click, take a screenshot, and notify. Flip to false only once you trust the flow.
+dry_run = true
+# Persistent Chromium profile dir. Run `python -m pokecentre.autobuy login` once to
+# log in to Pokemon Centre and save your card / Apple Pay device. The dir is reused
+# on every autobuy run so cookies + payment methods survive.
+profile_dir = ".chromium-profile"
+# Run with a visible browser window. Headless is more detectable; default headed.
+headless = false
+# Hard ceiling per order in GBP. Anything priced above is skipped (alert still fires).
+max_price_gbp = 200.0
+# Maximum successful orders per UTC day. Once hit, autobuy refuses for the rest of the day.
+max_orders_per_day = 2
+# Cool-down: don't re-attempt the same SKU within this many minutes after a failed run.
+retry_cool_down_minutes = 60
+# Substring allowlist applied to product title (case-insensitive). Empty = use the
+# tracking.title_keywords list. This lets you alert broadly but autobuy narrowly.
+allowlist_keywords = ["booster box", "elite trainer box", "etb"]
+# Button text patterns (regex, case-insensitive). Adjust if Pokemon Centre changes copy.
+add_to_bag_pattern = "add to bag|add to cart"
+checkout_pattern = "checkout|proceed to checkout"
+place_order_pattern = "place order|pay now|complete order"
+# How long to wait after clicking Place Order for confirmation / 3DS resolution.
+post_pay_timeout_seconds = 90
