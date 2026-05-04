@@ -46,6 +46,12 @@ def _store() -> Store:
     return Store(_DB_PATH)
 
 
+@app.get("/healthz")
+def healthz() -> dict:
+    # Unauthenticated healthcheck for Render. Doesn't expose any data.
+    return {"ok": True}
+
+
 @app.get("/", response_class=HTMLResponse)
 def index(_user: str = Depends(_auth), filter: str = "all") -> HTMLResponse:
     s = _store()

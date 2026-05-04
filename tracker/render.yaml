@@ -1,0 +1,28 @@
+# Render Blueprint. Connect this repo in the Render dashboard and pick "Apply Blueprint".
+# After deploy, set the secret env vars (WEB_USER, WEB_PASS) in Environment, and upload
+# your config.toml as a Secret File mounted at /etc/secrets/config.toml.
+services:
+  - type: web
+    name: pokecentre
+    runtime: python
+    plan: starter
+    pythonVersion: "3.11"
+    buildCommand: pip install -r requirements.txt
+    startCommand: ./start.sh
+    healthCheckPath: /healthz
+    autoDeploy: true
+    disk:
+      name: data
+      mountPath: /data
+      sizeGB: 1
+    envVars:
+      - key: TRACKER_DB
+        value: /data/tracker.db
+      - key: CONFIG_PATH
+        value: /etc/secrets/config.toml
+      - key: POLL_SECONDS
+        value: "60"
+      - key: WEB_USER
+        sync: false      # set in Render dashboard
+      - key: WEB_PASS
+        sync: false      # set in Render dashboard
