@@ -11,6 +11,13 @@ from .notify import Alert, Notifier
 from .scraper import Product, Scraper
 from .store import Store
 
+
+def _build_scraper(cfg: Config):
+    if cfg.site.use_browser:
+        from .browser_scraper import BrowserScraper
+        return BrowserScraper(cfg.site, cfg.autobuy.profile_dir)
+    return Scraper(cfg.site)
+
 log = logging.getLogger("pokecentre")
 
 
@@ -39,7 +46,7 @@ async def run_once(cfg: Config) -> None:
             fallback_keywords=cfg.tracking.title_keywords,
         )
 
-    async with Scraper(cfg.site) as sc:
+    async with _build_scraper(cfg) as sc:
         # 1. Sitemap sweep — find new SKUs before they hit category pages.
         # First run is silent: we only want alerts on URLs that appear *after* bootstrap.
         try:
@@ -92,6 +99,8 @@ async def run_once(cfg: Config) -> None:
                 title=product.title,
                 price=product.price,
                 in_stock=product.in_stock,
+                image_url=product.image_url,
+                description=product.description,
             )
             store.mark_listed(product.url)
 
@@ -99,20 +108,25 @@ async def run_once(cfg: Config) -> None:
                 prev is not None and _became_in_stock(prev.in_stock, product.in_stock)
             )
 
-            if prev is None:
-                notifier.send(Alert(
-                    kind="new_listing",
-                    title=product.title or url,
-                    body=_describe(product),
-                    url=url,
-                ))
-            elif _became_in_stock(prev.in_stock, product.in_stock):
-                notifier.send(Alert(
-                    kind="restock",
-                    title=product.title or url,
-                    body=_describe(product),
-                    url=url,
-                ))
+            # Per-item alert preference (defaults to enabled if no row).
+            pref = store.get_preference(product.url)
+            alerts_on = pref.alert_enabled if pref is not None else True
+
+            if alerts_on:
+                if prev is None:
+                    notifier.send(Alert(
+                        kind="new_listing",
+                        title=product.title or url,
+                        body=_describe(product),
+                        url=url,
+                    ))
+                elif _became_in_stock(prev.in_stock, product.in_stock):
+                    notifier.send(Alert(
+                        kind="restock",
+                        title=product.title or url,
+                        body=_describe(product),
+                        url=url,
+                    ))
 
             if became_available and autobuyer is not None:
                 await autobuyer.maybe_buy(product)

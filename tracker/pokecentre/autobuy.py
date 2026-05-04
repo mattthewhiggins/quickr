@@ -73,6 +73,10 @@ class AutoBuyer:
         """Return a 'skipped' AutobuyResult to refuse, or None to proceed."""
         if not self.cfg.enabled:
             return AutobuyResult("skipped", "autobuy disabled")
+        # Per-item opt-in via the web UI. Default off — only buys items the user has toggled.
+        pref = self.store.get_preference(product.url)
+        if pref is None or not pref.autobuy_enabled:
+            return AutobuyResult("skipped", "not toggled on in UI")
         if product.in_stock is not True:
             return AutobuyResult("skipped", "not in stock")
         if self.store.autobuy_succeeded_for(product.url):

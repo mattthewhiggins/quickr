@@ -10,6 +10,11 @@ user_agent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36
 # Delay between requests, seconds. Be a polite bot.
 # 2.5s keeps you well under any reasonable rate-limit; lower at your own risk.
 request_delay_seconds = 2.5
+# When the plain HTTP scraper starts hitting 403s (Cloudflare challenge),
+# flip this to true. Uses Playwright + the autobuy persistent profile so the
+# scraper inherits the same cookies and fingerprint as a real browser.
+# Slower (1-3s per page) and ~400MB resident; only enable if needed.
+use_browser = false
 
 [tracking]
 # Category pages to scan for new SKUs / restocks.

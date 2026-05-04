@@ -16,6 +16,7 @@ class SiteConfig:
     sitemap_url: str
     user_agent: str
     request_delay_seconds: float
+    use_browser: bool = False
 
 
 @dataclass
@@ -78,7 +79,9 @@ def load(path: str | Path) -> Config:
     with open(path, "rb") as f:
         data = tomllib.load(f)
 
-    site = SiteConfig(**data["site"])
+    site_data = dict(data["site"])
+    site_data.setdefault("use_browser", False)
+    site = SiteConfig(**site_data)
     tracking = TrackingConfig(**data["tracking"])
     storage_db_path = data["storage"]["db_path"]
 

@@ -1,3 +1,12 @@
 httpx>=0.27
 selectolax>=0.3.21
 tomli>=2.0;python_version<"3.11"
+
+# Web UI (only needed if you run the toggle dashboard)
+fastapi>=0.110
+uvicorn[standard]>=0.29
+python-multipart>=0.0.9
+
+# Browser scraping + autobuy (only needed if you enable site.use_browser or autobuy.enabled)
+# After install:  playwright install chromium
+playwright>=1.44

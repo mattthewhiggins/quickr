@@ -12,6 +12,8 @@ CREATE TABLE IF NOT EXISTS products (
     title TEXT,
     price TEXT,
     in_stock INTEGER,
+    image_url TEXT,
+    description TEXT,
     first_seen INTEGER NOT NULL,
     last_seen INTEGER NOT NULL,
     last_changed INTEGER NOT NULL
@@ -31,10 +33,25 @@ CREATE TABLE IF NOT EXISTS autobuy_attempts (
     attempted_at INTEGER NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS product_preferences (
+    url TEXT PRIMARY KEY,
+    alert_enabled INTEGER NOT NULL DEFAULT 1,
+    autobuy_enabled INTEGER NOT NULL DEFAULT 0,
+    updated_at INTEGER NOT NULL
+);
+
 CREATE INDEX IF NOT EXISTS idx_products_last_seen ON products(last_seen);
+CREATE INDEX IF NOT EXISTS idx_products_in_stock ON products(in_stock);
 CREATE INDEX IF NOT EXISTS idx_autobuy_url_time ON autobuy_attempts(url, attempted_at);
 CREATE INDEX IF NOT EXISTS idx_autobuy_status_time ON autobuy_attempts(status, attempted_at);
 """
+
+
+# For backwards-compat with DBs created before image/description columns existed.
+_PRODUCT_MIGRATIONS = [
+    "ALTER TABLE products ADD COLUMN image_url TEXT",
+    "ALTER TABLE products ADD COLUMN description TEXT",
+]
 
 
 @dataclass
@@ -46,6 +63,16 @@ class ProductRow:
     first_seen: int
     last_seen: int
     last_changed: int
+    image_url: str | None = None
+    description: str | None = None
+
+
+@dataclass
+class PreferenceRow:
+    url: str
+    alert_enabled: bool
+    autobuy_enabled: bool
+    updated_at: int
 
 
 class Store:
@@ -56,6 +83,11 @@ class Store:
     def _init(self) -> None:
         with self._conn() as c:
             c.executescript(SCHEMA)
+            for stmt in _PRODUCT_MIGRATIONS:
+                try:
+                    c.execute(stmt)
+                except sqlite3.OperationalError:
+                    pass  # column already exists
 
     @contextmanager
     def _conn(self):
@@ -78,6 +110,8 @@ class Store:
         title: str | None,
         price: str | None,
         in_stock: bool | None,
+        image_url: str | None = None,
+        description: str | None = None,
     ) -> tuple[ProductRow | None, ProductRow]:
         """Returns (previous_state_or_None, new_state). Stock changes update last_changed."""
         now = int(time.time())
@@ -85,9 +119,9 @@ class Store:
         with self._conn() as c:
             if prev is None:
                 c.execute(
-                    "INSERT INTO products (url, title, price, in_stock, first_seen, last_seen, last_changed) "
-                    "VALUES (?, ?, ?, ?, ?, ?, ?)",
-                    (url, title, price, _b(in_stock), now, now, now),
+                    "INSERT INTO products (url, title, price, in_stock, image_url, description, "
+                    "first_seen, last_seen, last_changed) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                    (url, title, price, _b(in_stock), image_url, description, now, now, now),
                 )
             else:
                 changed = (
@@ -96,11 +130,14 @@ class Store:
                 )
                 c.execute(
                     "UPDATE products SET title = COALESCE(?, title), price = ?, in_stock = ?, "
+                    "image_url = COALESCE(?, image_url), description = COALESCE(?, description), "
                     "last_seen = ?, last_changed = ? WHERE url = ?",
                     (
                         title,
                         price,
                         _b(in_stock),
+                        image_url,
+                        description,
                         now,
                         now if changed else prev.last_changed,
                         url,
@@ -109,6 +146,13 @@ class Store:
         new = self.get_product(url)
         assert new is not None
         return prev, new
+
+    def all_products(self) -> list[ProductRow]:
+        with self._conn() as c:
+            rows = c.execute(
+                "SELECT * FROM products ORDER BY in_stock DESC, last_changed DESC"
+            ).fetchall()
+        return [ProductRow(**dict(r)) for r in rows]
 
     def record_sitemap_urls(self, urls: list[str]) -> list[str]:
         """Insert any unseen URLs. Returns list of newly added URLs."""
@@ -162,6 +206,51 @@ class Store:
                 (url, cutoff),
             ).fetchone()
         return row is not None
+
+    def get_preference(self, url: str) -> PreferenceRow | None:
+        with self._conn() as c:
+            row = c.execute("SELECT * FROM product_preferences WHERE url = ?", (url,)).fetchone()
+        if not row:
+            return None
+        return PreferenceRow(
+            url=row["url"],
+            alert_enabled=bool(row["alert_enabled"]),
+            autobuy_enabled=bool(row["autobuy_enabled"]),
+            updated_at=int(row["updated_at"]),
+        )
+
+    def all_preferences(self) -> dict[str, PreferenceRow]:
+        with self._conn() as c:
+            rows = c.execute("SELECT * FROM product_preferences").fetchall()
+        out: dict[str, PreferenceRow] = {}
+        for r in rows:
+            out[r["url"]] = PreferenceRow(
+                url=r["url"],
+                alert_enabled=bool(r["alert_enabled"]),
+                autobuy_enabled=bool(r["autobuy_enabled"]),
+                updated_at=int(r["updated_at"]),
+            )
+        return out
+
+    def set_preference(
+        self,
+        url: str,
+        alert_enabled: bool | None = None,
+        autobuy_enabled: bool | None = None,
+    ) -> PreferenceRow:
+        existing = self.get_preference(url)
+        ae = alert_enabled if alert_enabled is not None else (existing.alert_enabled if existing else True)
+        ab = autobuy_enabled if autobuy_enabled is not None else (existing.autobuy_enabled if existing else False)
+        now = int(time.time())
+        with self._conn() as c:
+            c.execute(
+                "INSERT INTO product_preferences (url, alert_enabled, autobuy_enabled, updated_at) "
+                "VALUES (?, ?, ?, ?) "
+                "ON CONFLICT(url) DO UPDATE SET alert_enabled=excluded.alert_enabled, "
+                "autobuy_enabled=excluded.autobuy_enabled, updated_at=excluded.updated_at",
+                (url, int(ae), int(ab), now),
+            )
+        return PreferenceRow(url=url, alert_enabled=ae, autobuy_enabled=ab, updated_at=now)
 
     def autobuy_successes_today_utc(self) -> int:
         # Day boundary in UTC.

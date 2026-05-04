@@ -22,6 +22,8 @@ class Product:
     title: str | None
     price: str | None
     in_stock: bool | None
+    image_url: str | None = None
+    description: str | None = None
 
 
 class Scraper:
@@ -118,6 +120,8 @@ def parse_product(url: str, html: str) -> Product:
     title: str | None = None
     price: str | None = None
     in_stock: bool | None = None
+    image_url: str | None = None
+    description: str | None = None
 
     # JSON-LD product blocks (most reliable when present)
     for node in tree.css('script[type="application/ld+json"]'):
@@ -134,6 +138,10 @@ def parse_product(url: str, html: str) -> Product:
             if "Product" not in types:
                 continue
             title = title or entry.get("name")
+            description = description or entry.get("description")
+            img = entry.get("image")
+            if img and image_url is None:
+                image_url = img[0] if isinstance(img, list) else img
             offers = entry.get("offers")
             offer_list = offers if isinstance(offers, list) else [offers] if offers else []
             for o in offer_list:
@@ -159,6 +167,21 @@ def parse_product(url: str, html: str) -> Product:
         if t:
             title = (t.text() or "").strip() or None
 
+    # Image fallback: og:image
+    if not image_url:
+        og_img = tree.css_first('meta[property="og:image"]')
+        if og_img:
+            image_url = og_img.attributes.get("content")
+
+    # Description fallback: og:description / meta description
+    if not description:
+        for sel in ('meta[property="og:description"]', 'meta[name="description"]'):
+            n = tree.css_first(sel)
+            if n:
+                description = n.attributes.get("content")
+                if description:
+                    break
+
     # Price fallback: scan body for £ pattern
     if not price:
         body = tree.body
@@ -176,7 +199,14 @@ def parse_product(url: str, html: str) -> Product:
         elif any(s in body_text for s in ("add to cart", "add to bag", "buy now")):
             in_stock = True
 
-    return Product(url=url, title=title, price=price, in_stock=in_stock)
+    return Product(
+        url=url,
+        title=title,
+        price=price,
+        in_stock=in_stock,
+        image_url=image_url,
+        description=(description.strip()[:500] if description else None),
+    )
 
 
 def _iter_jsonld(node):
